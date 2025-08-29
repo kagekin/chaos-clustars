@@ -12,7 +12,7 @@
     <meta name="twitter:card" content="summary_large_image">
     
     <!-- Tailwind CSSとGSAPの読み込み -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn-tailwindcss.vercel.app/"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/Draggable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -28,12 +28,11 @@
             font-family: 'DotGothic16', sans-serif;
             background-color: #000;
             color: #fff;
-            /* overflow: hidden; を削除してスクロール可能に */
             cursor: none; /* カスタムカーソルを使用するためデフォルトは非表示 */
         }
 
         #site-container {
-             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiPgo8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzAwMDAwMCIgLz4KPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMiIgZmlsbD0iIzNmN2YahODg4OCIgLz4KPC9zdmc+');
+             background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZHRoPSIzMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiPgo8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzAwMDAwMCIgLz4KPGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iMiIgZmlsbD0iIzNmN2YahODg4OCIgLz4KPC9zdmc+');
             background-size: 20px 20px;
         }
 
@@ -46,10 +45,19 @@
             z-index: 9999;
             width: 32px;
             height: 32px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX/AAAAAAD/AAD/nAL/AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAFUlEQVQ4y2NgGAWjYBSMglEwCkYgAgAATwAABAAB/wAAAABJRU5ErkJggg==');
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX/AAAAAAD/AAD/nAL/AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAFUlEQVQ4y2NgGAWjYBSMglEwCkYgAgAATwAABAAB/wAAAABJRU5ErkJggg==');
             background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
             mix-blend-mode: difference;
-            transition: transform 0.1s ease-out;
+            transition: transform 0.1s ease-out, background-image 0.3s ease, width 0.3s ease, height 0.3s ease;
+        }
+        
+        body.ufo-cursor-active .custom-cursor {
+            background-image: url('https://ccparty.kagekin.com/img/ufo.png');
+            width: 64px;
+            height: 64px;
+            mix-blend-mode: normal;
         }
 
         /* XP風ウィンドウのスタイル */
@@ -77,212 +85,126 @@
             align-items: center;
         }
 
-        .title-bar-buttons {
-            display: flex;
-        }
-
+        .title-bar-buttons, .window-body { cursor: none; }
+        
         .title-bar-button {
-            width: 18px;
-            height: 18px;
-            border: 1px solid;
-            border-color: #fff #555 #555 #fff;
-            background-color: #c0c0c0;
-            margin-left: 3px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
+            width: 18px; height: 18px; border: 1px solid; border-color: #fff #555 #555 #fff;
+            background-color: #c0c0c0; margin-left: 3px; display: flex;
+            justify-content: center; align-items: center; font-weight: bold;
         }
 
         .window-body {
-            padding: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-            background-color: #fff;
-            margin: 3px;
-            border: 1px solid #7f7f7f;
+            padding: 10px; max-height: 250px; overflow-y: auto;
+            background-color: #fff; margin: 3px; border: 1px solid #7f7f7f;
         }
+        .window-body img { width: 100%; height: auto; }
 
-        .window-body img {
-            width: 100%;
-            height: auto;
-        }
-
-        /* WordArt風のメインタイトル */
         #main-title {
-            font-size: 5rem;
-            font-weight: bold;
-            color: #f0f;
-            text-shadow: 
-                -3px -3px 0 #0ff, 
-                3px -3px 0 #0ff, 
-                -3px 3px 0 #0ff, 
-                3px 3px 0 #0ff,
-                -5px -5px 0 #ff0, 
-                5px -5px 0 #ff0, 
-                -5px 5px 0 #ff0, 
-                5px 5px 0 #ff0;
-            text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 100;
-            cursor: pointer;
-            user-select: none;
+            font-size: 5rem; font-weight: bold; color: #f0f;
+            text-shadow: -3px -3px 0 #0ff, 3px -3px 0 #0ff, -3px 3px 0 #0ff, 3px 3px 0 #0ff, -5px -5px 0 #ff0, 5px -5px 0 #ff0, -5px 5px 0 #ff0, 5px 5px 0 #ff0;
+            text-align: center; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); z-index: 100; cursor: pointer; user-select: none;
         }
 
-        /* リンクのスタイル */
-        a {
-            color: #0000ff;
-            text-decoration: underline;
-        }
-        a:hover {
-            color: #ff00ff;
-        }
+        a { color: #0000ff; text-decoration: underline; cursor: none !important; }
+        a:hover { color: #ff00ff; }
 
-        /* GOボタンのスタイル */
         .go-button {
-            display: inline-block;
-            padding: 2px 10px;
-            border: 2px solid;
-            border-color: #fff #555 #555 #fff;
-            background-color: #c0c0c0;
-            text-decoration: none;
-            color: #000 !important;
-            margin-right: 5px;
-            margin-top: 5px;
-            font-weight: bold;
+            display: inline-block; padding: 2px 10px; border: 2px solid;
+            border-color: #fff #555 #555 #fff; background-color: #c0c0c0;
+            text-decoration: none; color: #000 !important; margin-right: 5px;
+            margin-top: 5px; font-weight: bold;
         }
-        .go-button:active {
-            border-color: #555 #fff #fff #555;
-        }
-        .go-button:hover {
-            background-color: #d0d0d0;
-        }
+        .go-button:active { border-color: #555 #fff #fff #555; }
+        .go-button:hover { background-color: #d0d0d0; }
 
-        /* カオスロゴのスタイル */
         .chaos-logo {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100px; /* ベースサイズ */
-            height: auto;
-            pointer-events: none;
-            z-index: 5; /* ウィンドウより下、背景より上 */
-            opacity: 0.7;
-            will-change: transform;
+            position: absolute; top: 0; left: 0; width: 100px; height: auto;
+            pointer-events: none; z-index: 5; opacity: 0.7; will-change: transform;
         }
         
-        /* Xシェアボタンのスタイル */
         #x-share-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 9999;
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-            filter: drop-shadow(0 0 10px #0ff);
+            position: fixed; bottom: 20px; right: 20px; z-index: 9999;
+            width: 80px; height: 80px; cursor: pointer; filter: drop-shadow(0 0 10px #0ff);
             transition: transform 0.2s ease-in-out;
         }
-        #x-share-button:hover {
-            transform: scale(1.1) rotate(-5deg);
-        }
-        #x-share-button .pupil {
-            transition: transform 0.2s;
-        }
+        #x-share-button:hover { transform: scale(1.1) rotate(-5deg); }
+        #x-share-button .pupil { transition: transform 0.2s; }
         
         .share-text {
-            position: absolute;
-            bottom: 95%;
-            right: 0;
-            background: #f0f;
-            color: #0ff;
-            padding: 5px 10px;
-            border: 2px solid #0ff;
-            box-shadow: 0 0 10px #f0f;
-            font-size: 14px;
-            font-weight: bold;
-            white-space: nowrap;
-            opacity: 0;
-            transform: translateY(10px) rotate(5deg);
+            position: absolute; bottom: 95%; right: 0; background: #f0f;
+            color: #0ff; padding: 5px 10px; border: 2px solid #0ff;
+            box-shadow: 0 0 10px #f0f; font-size: 14px; font-weight: bold;
+            white-space: nowrap; opacity: 0; transform: translateY(10px) rotate(5deg);
             transition: opacity 0.3s ease, transform 0.3s ease;
-            pointer-events: none;
-            visibility: hidden;
+            pointer-events: none; visibility: hidden;
         }
+        #x-share-button:hover .share-text { opacity: 1; transform: translateY(0) rotate(0deg); visibility: visible; }
 
-        #x-share-button:hover .share-text {
-            opacity: 1;
-            transform: translateY(0) rotate(0deg);
-            visibility: visible;
+        #fixed-discord-button {
+            position: fixed; top: 80px; right: 20px; z-index: 9998;
+            width: 80px; height: 80px; background-color: #5865F2;
+            border-radius: 50%; border: 3px solid #fff; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+            color: white; font-weight: bold; text-align: center; line-height: 1.2;
+            font-size: 14px; text-decoration: none; transition: transform 0.3s ease;
         }
+        #fixed-discord-button:hover { transform: scale(1.1); }
+        #fixed-discord-button .emoji { font-size: 24px; margin-top: -5px; }
 
-        #ufo-section {
+
+        #ufo-section, #discord-banner-section {
             background-image: radial-gradient(circle, #0f0 1px, transparent 1px);
             background-size: 20px 20px;
         }
+        #recruiting-section { background: #000 repeating-linear-gradient(45deg, #ff0, #ff0 10px, #f0f 10px, #f0f 20px); padding: 80px 20px; }
+        .recruiting-card { background: rgba(0,0,0,0.8); border: 4px solid #0ff; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .recruiting-card:hover { transform: translateY(-10px); box-shadow: 0 20px 30px rgba(0, 255, 255, 0.5); }
 
-        #timeline-section {
-            background-color: #000;
-            padding: 100px 20px;
-            position: relative;
-            z-index: 10;
+        #discord-banner-section {
+            overflow: hidden; position: relative; height: 400px;
+            display: flex; flex-wrap: wrap; align-content: flex-start;
         }
-        #timeline-container {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
+        .discord-banner {
+            background: #5865F2; color: #fff; border: 2px solid #fff;
+            padding: 5px 10px; margin: 5px; font-size: 1.5rem;
+            text-decoration: none; will-change: transform;
         }
+
+        #timeline-section { background-color: #000; padding: 100px 20px; position: relative; z-index: 10; }
+        #timeline-container { position: relative; max-width: 800px; margin: 0 auto; }
         #timeline-container::after {
-            content: '';
-            position: absolute;
-            width: 6px;
-            background-color: #0ff;
-            box-shadow: 0 0 10px #0ff;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            margin-left: -3px;
+            content: ''; position: absolute; width: 6px; background-color: #0ff;
+            box-shadow: 0 0 10px #0ff; top: 0; bottom: 0; left: 50%; margin-left: -3px;
         }
-
-        .timeline-item {
-            padding: 10px 40px;
-            position: relative;
-            background-color: inherit;
-            width: 50%;
-        }
-
+        .timeline-item { padding: 10px 40px; position: relative; background-color: inherit; width: 50%; }
         .timeline-item::after {
-            content: '';
-            position: absolute;
-            width: 25px;
-            height: 25px;
-            right: -17px;
-            background-color: #f0f;
-            border: 4px solid #0ff;
-            top: 15px;
-            border-radius: 50%;
-            z-index: 1;
+            content: ''; position: absolute; width: 25px; height: 25px; right: -17px;
+            background-color: #f0f; border: 4px solid #0ff; top: 15px; border-radius: 50%; z-index: 1;
         }
-        .left {
-            left: 0;
+        .left { left: 0; }
+        .right { left: 50%; }
+        .right::after { left: -16px; }
+        .timeline-content { padding: 20px 30px; background-color: #1a1a1a; border: 2px solid #0ff; position: relative; border-radius: 6px; }
+    
+        #yugiri-section { background-color: #000; }
+        .mandala-bg {
+            position: absolute; inset: 0; background-color: #000; opacity: 0;
+            background-image: repeating-radial-gradient(circle at center, #f0f, #0ff 5px, #000 10px, #f0f 20px);
+            animation: mandala-pulse 10s linear infinite;
         }
-        .right {
-            left: 50%;
+        @keyframes mandala-pulse {
+            0% { background-size: 100% 100%; opacity: 0.5; }
+            50% { background-size: 200% 200%; opacity: 1; }
+            100% { background-size: 100% 100%; opacity: 0.5; }
         }
-        .right::after {
-            left: -16px;
-        }
-        .timeline-content {
-            padding: 20px 30px;
-            background-color: #1a1a1a;
-            border: 2px solid #0ff;
-            position: relative;
-            border-radius: 6px;
-        }
+        #yugiri-char, #mandala-text { opacity: 0; }
 
-
+        .flying-discord-btn {
+            position: absolute; background: #5865F2; color: #fff; padding: 10px 15px;
+            border-radius: 8px; border: 2px solid white; font-weight: bold;
+            text-decoration: none; will-change: transform;
+        }
     </style>
 </head>
 <body>
@@ -294,403 +216,198 @@
     <a id="x-share-button">
         <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <polygon points="50,10 90,90 10,90" fill="#f0f" stroke="#0ff" stroke-width="2"/>
-            <circle cx="50" cy="55" r="25" fill="#fff"/>
-            <circle class="pupil" cx="50" cy="55" r="12" fill="#000"/>
+            <circle cx="50" cy="55" r="25" fill="#fff"/><circle class="pupil" cx="50" cy="55" r="12" fill="#000"/>
+            <text x="50" y="62" font-family="DotGothic16, sans-serif" font-size="20" fill="#0ff" text-anchor="middle" font-weight="bold" style="pointer-events: none; text-shadow: 0 0 3px #0ff;">X</text>
             <path d="M35 55 Q 50 40 65 55" stroke="red" fill="none" stroke-width="2"/>
             <path d="M35 55 Q 50 70 65 55" stroke="red" fill="none" stroke-width="2"/>
         </svg>
         <div class="share-text">Xにカクサン！</div>
     </a>
+    <a href="https://discord.gg/VqgHpatD8g" target="_blank" id="fixed-discord-button">
+        <span>Dに<br>参加</span><span class="emoji">🐟️</span>
+    </a>
 
     <!-- メインのスクロールコンテンツ -->
     <main>
-        <!-- セクション1: カオスなデスクトップ -->
         <section id="site-container" class="w-full h-screen relative overflow-hidden">
             <h1 id="main-title">CLUSTARS<br>大集合まつり<br>～CHAOS～</h1>
         </section>
-
-        <!-- セクション2: 概要画像 -->
         <section id="overview-section" class="w-full bg-black py-20 flex justify-center items-center">
             <img src="https://storage.googleapis.com/studio-design-asset-files/projects/1YWjBvJgWm/s-4096x2304_v-frms_webp_5dfd378a-2344-4c06-a5a7-a8707dd7cf50_middle.webp" alt="イベント概要" class="max-w-4xl w-full p-2 border-4 border-fuchsia-500 shadow-lg shadow-cyan-400/50 rounded-lg">
         </section>
 
-        <!-- セクション3: UFO -->
-        <section id="ufo-section" class="w-full h-screen relative overflow-hidden flex flex-col justify-center items-center">
-            <img id="kagekin-ufo" src="https://ccparty.kagekin.com/img/ufo.png" alt="Kagekin UFO" class="w-64 md:w-96 h-auto absolute will-change-transform">
-            <p class="text-cyan-400 text-2xl z-10 mt-64 md:mt-96 text-center tracking-widest" style="text-shadow: 0 0 5px #0ff;">
-                Y O U . A R E . B E I N G . W A T C H E D . . .
-            </p>
+        <section id="recruiting-section">
+            <div class="text-center mb-12"><h2 class="text-6xl font-black text-white" style="text-shadow: 0 0 5px #ff0, 0 0 10px #ff0, 0 0 20px #f0f;">募集中！ 募集中！ 募集中！</h2></div>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="recruiting-card p-4 rounded-lg flex flex-col items-center text-center">
+                    <h3 class="text-2xl text-fuchsia-400 font-bold mb-4">3Dキメラ製作選手権<br>キメラアバター募集中</h3>
+                    <img src="https://pbs.twimg.com/media/GzSdTPvaYAAWwzu?format=jpg" alt="3Dキメラ製作選手権" class="w-full h-auto rounded-md mb-4 border-2 border-fuchsia-400">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScwBuHDoWQmQ-LbaNlccKXZD8DbGTRw6_FOoOtdx6CDaNAttQ/viewform" target="_blank" class="go-button text-lg !bg-yellow-400 !text-black !font-bold">応募フォームへ</a>
+                </div>
+                <div class="recruiting-card p-4 rounded-lg flex flex-col items-center text-center">
+                    <h3 class="text-2xl text-yellow-400 font-bold mb-4">クレイジーカオスパーティ<br>パーティアイテム募集中</h3>
+                    <img src="https://pbs.twimg.com/media/GzhinG5agAAov-X?format=png" alt="クレイジーカオスパーティ" class="w-full h-auto rounded-md mb-4 border-2 border-yellow-400">
+                    <a href="https://ccparty.kagekin.com/" target="_blank" class="go-button text-lg !bg-fuchsia-500 !text-white !font-bold">公式サイトで応募</a>
+                </div>
+                <div class="recruiting-card p-4 rounded-lg flex flex-col items-center text-center">
+                    <h3 class="text-2xl text-cyan-400 font-bold mb-4">カオス美術館<br>美術品を募集中</h3>
+                    <img src="https://pbs.twimg.com/media/GzRl8TCaoAA7OaQ?format=jpg&name=medium" alt="カオス美術館" class="w-full h-auto rounded-md mb-4 border-2 border-cyan-400">
+                    <a href="https://discord.com/channels/1086619646947495976/1405368923641348207" target="_blank" class="go-button text-lg !bg-cyan-400 !text-black !font-bold">Discordで応募</a>
+                </div>
+            </div>
         </section>
 
-        <!-- セクション4: イベントタイムライン -->
+        <section id="discord-banner-section"></section>
+        <section id="ufo-section" class="w-full h-screen relative overflow-hidden flex flex-col justify-center items-center">
+            <img id="kagekin-ufo" src="https://ccparty.kagekin.com/img/ufo.png" alt="Kagekin UFO" class="w-64 md:w-96 h-auto absolute will-change-transform">
+            <p class="text-cyan-400 text-2xl z-10 mt-64 md:mt-96 text-center tracking-widest" style="text-shadow: 0 0 5px #0ff;">Y O U . A R E . B E I N G . W A T C H E D . . .</p>
+        </section>
         <section id="timeline-section">
              <h2 class="text-5xl font-bold text-center mb-20 text-cyan-400" style="text-shadow: 0 0 10px #0ff;">E V E N T _ T I M E L I N E . EXE</h2>
-            <div id="timeline-container">
-                <!-- イベントはここにJSで生成されます -->
-            </div>
+            <div id="timeline-container"></div>
+        </section>
+        <section id="yugiri-section" class="w-full min-h-screen relative overflow-hidden flex flex-col justify-center items-center p-8">
+            <div class="mandala-bg"></div>
+            <img id="yugiri-char" src="http://chaos-clustars.kagekin.com/img/yugiri.png" alt="ゆうぎり" class="relative z-10 w-full max-w-md h-auto mb-8">
+            <p id="mandala-text" class="relative z-10 text-3xl text-center text-white" style="text-shadow: 0 0 10px #f0f;">見えますか？ これが私の曼荼羅の目</p>
+            <div id="flying-discord-container" class="absolute inset-0 z-20"></div>
         </section>
     </main>
 
-
-    <!-- JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-
-            // --- CSVから変換したイベントデータ ---
             const eventData = [
-                {
-                    "イベントタイトル": "開会式", "実施日": "2025-08-31", "開始時間": "23:00", "終了時間": "0:30",
-                    "実施プラットフォーム": "Youtube", "担当連絡者": "ひかる", "備考、イベント内容": "開会式。CLUSTARSまつりに参加される方はご記入お願いいたします。",
-                    "会場URL": "", "YoutubeURL": ""
-                },
-                {
-                    "イベントタイトル": "出張版あしたへすすめらじお", "実施日": "2025-09-01", "開始時間": "20:30", "終了時間": "21:00",
-                    "実施プラットフォーム": "cluster, Youtube", "担当連絡者": "まみたす", "備考、イベント内容": "猫日和きゃりことまみたすがテーマに沿ってお話をする30分ラジオ番組。YouTubeは1週間後アーカイブ。ゲストに誰かを呼びたい。（猫熊土竜さんを予定）",
-                    "会場URL": "https://cluster.mu/e/a5d952b2-741f-492a-81b1-4a18ba998881", "YoutubeURL": ""
-                },
-                {
-                    "イベントタイトル": "大喜利STARS", "実施日": "2025-09-02", "開始時間": "21:00", "終了時間": "22:00",
-                    "実施プラットフォーム": "Youtube, cluster", "担当連絡者": "ペルキ", "備考、イベント内容": "大喜利STARSはその名の通り、大喜利をするイベントです。回答者の方々にマイクやコメントを使ってお題に面白く答えていただきます！",
-                    "会場URL": "https://cluster.mu/e/fcedb69b-a387-4eca-b66b-b7650f2925e7", "YoutubeURL": ""
-                },
-                {
-                    "イベントタイトル": "ねことあそぶ", "実施日": "2025-09-03", "開始時間": "21:00", "終了時間": "22:00",
-                    "実施プラットフォーム": "cluster", "担当連絡者": "みゅう", "備考、イベント内容": "ねこ型アバターのみんなでわいわい遊ぶ会です！ねこ好きさんも是非！",
-                    "会場URL": "https://cluster.mu/e/5c9603f2-1d11-4475-ac10-fdf8f470a7d9", "YoutubeURL": ""
-                },
-                {
-                    "イベントタイトル": "第1回『うちの子』プレゼン大会", "実施日": "2025-09-03", "開始時間": "22:00", "終了時間": "23:00",
-                    "実施プラットフォーム": "cluster", "担当連絡者": "ひかる", "備考、イベント内容": "君の『うちの子』について語ってみないか？自慢の『うちの子』のエピソード・設定・アピールポイントなどをプレゼンしていただきます。観覧のみもOK。",
-                    "会場URL": "https://cluster.mu/e/377759a2-706f-4d32-8418-4905d47ab95e", "YoutubeURL": ""
-                },
-                {
-                    "イベントタイトル": "夜食テロ！飯テロ会場はこちらです！", "実施日": "2025-09-04", "開始時間": "23:00", "終了時間": "0:00",
-                    "実施プラットフォーム": "cluster", "担当連絡者": "カガミヅキ", "備考、イベント内容": "飯テロの時間だあああああ！！！！飯テロを合法的にできるワールドでみんなで飯テロしようぜ！！！！！君が思う最強の飯テロ写真をclusterにアップロードしてくれ！！！！そして自慢してくれ！！！！！",
-                    "会場URL": "https://cluster.mu/e/85913f0a-1a89-4a0b-a010-9118d8e03a72", "YoutubeURL": ""
-                },
-                {
-                    "イベントタイトル": "真夏のアドレセンス（idol live 2025）", "実施日": "2025-09-05", "開始時間": "21:00", "終了時間": "23:00",
-                    "実施プラットフォーム": "cluster, Youtube", "担当連絡者": "飾莉まお", "備考、イベント内容": "アイドルVtuberさんによる夏フェスをイメージしたライブイベントの予定です。コラボステージとかやりたいなー！諸々未定です！手探りですががんばります！",
-                    "会場URL": "https://cluster.mu/e/5d74d35c-f68d-4f0d-8850-4371297f2577", "YoutubeURL": "https://www.youtube.com/watch?v=WdehZpcH0eo"
-                },
-                {
-                    "イベントタイトル": "第82回 3Dキメラ製作選手権", "実施日": "2025-09-05", "開始時間": "23:00", "終了時間": "未定",
-                    "実施プラットフォーム": "Youtube", "担当連絡者": "はましょー", "備考、イベント内容": "合成する3Dモデル+合成指示書を募集。指示書に従い、3Dモデルのキメラをblenderを使って作成する公開配信です。合成してできたものは、clusterで使用できるメッシュ数に落とした状態でお返し、できそうなら、リグまでつけます。",
-                    "会場URL": "", "YoutubeURL": "https://www.youtube.com/watch?v=XOxTbMR5iJ0"
-                },
-                {
-                    "イベントタイトル": "クレイジーカオスパーティー！《マジヤバ～イ！ 限界ブチ上げ領域！》", "実施日": "2025-09-06", "開始時間": "18:00", "終了時間": "20:00",
-                    "実施プラットフォーム": "Youtube, cluster", "担当連絡者": "カゲキン", "備考、イベント内容": "YO! ユーたちわかってんのか？ カオスなやつらが集まって限界を超えたパーティーを開催だぜ！音楽！映像！パフォーマンス！全部ごちゃまぜの空間でブチ上がれ！ついてこれるやつだけついてきな！",
-                    "会場URL": "https://cluster.mu/e/b9a9f9d7-8e6f-4c5a-a5c1-c9a9d9b9e9f9", "YoutubeURL": "", "公式サイトURL": "https://ccparty.kagekin.com/"
-                }
+                {"イベントタイトル": "開会式", "実施日": "2025-08-31", "開始時間": "23:00", "終了時間": "0:30", "実施プラットフォーム": "Youtube", "担当連絡者": "ひかる", "備考、イベント内容": "開会式。CLUSTARSまつりに参加される方はご記入お願いいたします。", "会場URL": "", "YoutubeURL": ""},
+                {"イベントタイトル": "出張版あしたへすすめらじお", "実施日": "2025-09-01", "開始時間": "20:30", "終了時間": "21:00", "実施プラットフォーム": "cluster, Youtube", "担当連絡者": "まみたす", "備考、イベント内容": "猫日和きゃりことまみたすがテーマに沿ってお話をする30分ラジオ番組。YouTubeは1週間後アーカイブ。ゲストに誰かを呼びたい。（猫熊土竜さんを予定）", "会場URL": "https://cluster.mu/e/a5d952b2-741f-492a-81b1-4a18ba998881", "YoutubeURL": ""},
+                {"イベントタイトル": "大喜利STARS", "実施日": "2025-09-02", "開始時間": "21:00", "終了時間": "22:00", "実施プラットフォーム": "Youtube, cluster", "担当連絡者": "ペルキ", "備考、イベント内容": "大喜利STARSはその名の通り、大喜利をするイベントです。回答者の方々にマイクやコメントを使ってお題に面白く答えていただきます！", "会場URL": "https://cluster.mu/e/fcedb69b-a387-4eca-b66b-b7650f2925e7", "YoutubeURL": ""},
+                {"イベントタイトル": "ねことあそぶ", "実施日": "2025-09-03", "開始時間": "21:00", "終了時間": "22:00", "実施プラットフォーム": "cluster", "担当連絡者": "みゅう", "備考、イベント内容": "ねこ型アバターのみんなでわいわい遊ぶ会です！ねこ好きさんも是非！", "会場URL": "https://cluster.mu/e/5c9603f2-1d11-4475-ac10-fdf8f470a7d9", "YoutubeURL": ""},
+                {"イベントタイトル": "第1回『うちの子』プレゼン大会", "実施日": "2025-09-03", "開始時間": "22:00", "終了時間": "23:00", "実施プラットフォーム": "cluster", "担当連絡者": "ひかる", "備考、イベント内容": "君の『うちの子』について語ってみないか？自慢の『うちの子』のエピソード・設定・アピールポイントなどをプレゼンしていただきます。観覧のみもOK。", "会場URL": "https://cluster.mu/e/377759a2-706f-4d32-8418-4905d47ab95e", "YoutubeURL": ""},
+                {"イベントタイトル": "夜食テロ！飯テロ会場はこちらです！", "実施日": "2025-09-04", "開始時間": "23:00", "終了時間": "0:00", "実施プラットフォーム": "cluster", "担当連絡者": "カガミヅキ", "備考、イベント内容": "飯テロの時間だあああああ！！！！飯テロを合法的にできるワールドでみんなで飯テロしようぜ！！！！！君が思う最強の飯テロ写真をclusterにアップロードしてくれ！！！！そして自慢してくれ！！！！！", "会場URL": "https://cluster.mu/e/85913f0a-1a89-4a0b-a010-9118d8e03a72", "YoutubeURL": ""},
+                {"イベントタイトル": "真夏のアドレセンス（idol live 2025）", "実施日": "2025-09-05", "開始時間": "21:00", "終了時間": "23:00", "実施プラットフォーム": "cluster, Youtube", "担当連絡者": "飾莉まお", "備考、イベント内容": "アイドルVtuberさんによる夏フェスをイメージしたライブイベントの予定です。コラボステージとかやりたいなー！諸々未定です！手探りですががんばります！", "会場URL": "https://cluster.mu/e/5d74d35c-f68d-4f0d-8850-4371297f2577", "YoutubeURL": "https://www.youtube.com/watch?v=WdehZpcH0eo"},
+                {"イベントタイトル": "第82回 3Dキメラ製作選手権", "実施日": "2025-09-05", "開始時間": "23:00", "終了時間": "未定", "実施プラットフォーム": "Youtube", "担当連絡者": "はましょー", "備考、イベント内容": "合成する3Dモデル+合成指示書を募集。指示書に従い、3Dモデルのキメラをblenderを使って作成する公開配信です。合成してできたものは、clusterで使用できるメッシュ数に落とした状態でお返し、できそうなら、リグまでつけます。", "会場URL": "", "YoutubeURL": "https://www.youtube.com/watch?v=XOxTbMR5iJ0"},
+                {"イベントタイトル": "クレイジーカオスパーティー！《マジヤバ～イ！ 限界ブチ上げ領域！》", "実施日": "2025-09-06", "開始時間": "18:00", "終了時間": "20:00", "実施プラットフォーム": "Youtube, cluster", "担当連絡者": "カゲキン", "備考、イベント内容": "YO! ユーたちわかってんのか？ カオスなやつらが集まって限界を超えたパーティーを開催だぜ！音楽！映像！パフォーマンス！全部ごちゃまぜの空間でブチ上がれ！ついてこれるやつだけついてきな！", "会場URL": "https://cluster.mu/e/b9a9f9d7-8e6f-4c5a-a5c1-c9a9d9b9e9f9", "YoutubeURL": "", "公式サイトURL": "https://ccparty.kagekin.com/"},
+                {"イベントタイトル": "閉会式", "実施日": "2025-09-06", "開始時間": "23:00", "終了時間": "未定", "実施プラットフォーム": "cluster", "担当連絡者": "ひかる", "備考、イベント内容": "CLUSTARS大集合まつり～CHAOS～の閉会式です。みんなで最後までカオスに盛り上がろう！", "会場URL": "", "YoutubeURL": ""}
             ];
 
             const container = document.getElementById('site-container');
             let highestZ = 100;
 
-            // --- GSAPプラグインの登録 ---
             gsap.registerPlugin(Draggable, ScrollTrigger);
 
-            // --- カスタムカーソルの設定 ---
             const cursor = document.querySelector('.custom-cursor');
             gsap.set(cursor, { xPercent: -50, yPercent: -50 });
-            window.addEventListener('mousemove', e => {
-                gsap.to(cursor, 0.1, { x: e.clientX, y: e.clientY });
-            });
-             document.addEventListener('mousedown', () => gsap.to(cursor, 0.2, { scale: 0.7 }));
+            window.addEventListener('mousemove', e => { gsap.to(cursor, 0.1, { x: e.clientX, y: e.clientY }); });
+            document.addEventListener('mousedown', () => gsap.to(cursor, 0.2, { scale: 0.7 }));
             document.addEventListener('mouseup', () => gsap.to(cursor, 0.2, { scale: 1 }));
 
-
-            // --- イベントウィンドウの生成 ---
             eventData.forEach((event, index) => {
                 const eventDate = new Date(event['実施日']);
                 const dateString = `${eventDate.getMonth() + 1}/${eventDate.getDate()}`;
-
                 const windowEl = document.createElement('div');
                 windowEl.className = 'window';
-                windowEl.innerHTML = `
-                    <div class="title-bar">
-                        <span>${event['イベントタイトル'].substring(0, 20)}...</span>
-                        <div class="title-bar-buttons">
-                            <div class="title-bar-button">_</div>
-                            <div class="title-bar-button">□</div>
-                            <div class="title-bar-button">X</div>
-                        </div>
-                    </div>
-                    <div class="window-body">
-                        <h2 class="text-lg font-bold mb-2">${event['イベントタイトル']}</h2>
-                        <p class="mb-1"><strong>日時:</strong> ${dateString} ${event['開始時間']} ~ ${event['終了時間']}</p>
-                        <p class="mb-1"><strong>担当:</strong> ${event['担当連絡者']}</p>
-                        <p class="mb-2"><strong>プラットフォーム:</strong> ${event['実施プラットフォーム']}</p>
-                        <p class="text-xs mb-2">${event['備考、イベント内容']}</p>
-                        <div class="links">
-                            ${event['会場URL'] ? `<a href="${event['会場URL']}" target="_blank" class="go-button">会場へGO!</a>` : ''}
-                            ${event['YoutubeURL'] ? `<a href="${event['YoutubeURL']}" target="_blank" class="go-button">YoutubeへGO!</a>` : ''}
-                            ${event['公式サイトURL'] ? `<a href="${event['公式サイトURL']}" target="_blank" class="go-button" style="background-color: #ff0; color: #f0f !important;">公式サイト</a>` : ''}
-                        </div>
-                    </div>
-                `;
+                windowEl.innerHTML = `<div class="title-bar"><span>${event['イベントタイトル'].substring(0, 20)}...</span><div class="title-bar-buttons"><div class="title-bar-button">_</div><div class="title-bar-button">□</div><div class="title-bar-button">X</div></div></div><div class="window-body"><h2 class="text-lg font-bold mb-2">${event['イベントタイトル']}</h2><p class="mb-1"><strong>日時:</strong> ${dateString} ${event['開始時間']} ~ ${event['終了時間']}</p><p class="mb-1"><strong>担当:</strong> ${event['担当連絡者']}</p><p class="mb-2"><strong>プラットフォーム:</strong> ${event['実施プラットフォーム']}</p><p class="text-xs mb-2">${event['備考、イベント内容']}</p><div class="links">${event['会場URL'] ? `<a href="${event['会場URL']}" target="_blank" class="go-button">会場へGO!</a>` : ''}${event['YoutubeURL'] ? `<a href="${event['YoutubeURL']}" target="_blank" class="go-button">YoutubeへGO!</a>` : ''}${event['公式サイトURL'] ? `<a href="${event['公式サイトURL']}" target="_blank" class="go-button" style="background-color: #ff0; color: #f0f !important;">公式サイト</a>` : ''}</div></div>`;
                 container.appendChild(windowEl);
-                
-                // --- ウィンドウの初期アニメーションと設定 ---
-                gsap.fromTo(windowEl, 
-                    {
-                        visibility: 'visible',
-                        x: () => window.innerWidth / 2,
-                        y: () => window.innerHeight / 2,
-                        scale: 0,
-                        rotation: () => Math.random() * 360 - 180
-                    },
-                    {
-                        x: () => Math.random() * (window.innerWidth - 350),
-                        y: () => Math.random() * (window.innerHeight - 250),
-                        scale: 1,
-                        rotation: () => Math.random() * 20 - 10,
-                        duration: 1.5,
-                        ease: "elastic.out(1, 0.5)",
-                        delay: 1.5 + index * 0.1
-                    }
-                );
-
-                // ウィンドウをクリックで最前面に
-                windowEl.addEventListener('mousedown', () => {
-                    highestZ++;
-                    gsap.set(windowEl, { zIndex: highestZ });
-                });
+                gsap.fromTo(windowEl, { visibility: 'visible', x: () => window.innerWidth / 2, y: () => window.innerHeight / 2, scale: 0, rotation: () => Math.random() * 360 - 180 }, { x: () => Math.random() * (window.innerWidth - 350), y: () => Math.random() * (window.innerHeight - 250), scale: 1, rotation: () => Math.random() * 20 - 10, duration: 1.5, ease: "elastic.out(1, 0.5)", delay: 1.5 + index * 0.1 });
+                windowEl.addEventListener('mousedown', () => { highestZ++; gsap.set(windowEl, { zIndex: highestZ }); });
             });
 
-            // --- 特別なウィンドウを生成 ---
             const specialWindows = [
-                {
-                    title: "DISCORD COMMUNITY",
-                    content: `
-                        <p class="mb-2">バーチャルでお友達がもっとほしい！<br>そんな人にこそ、CLUSTARS大集合まつり。</p>
-                        <p class="font-bold text-lg my-2 text-center">BE MORE CHAOS！！</p>
-                        <p class="mb-2">1歩踏み出すのに、完璧なんていらない。<br>カオスでOK、未完成でOK。</p>
-                        <p class="mb-3">あなたの“CHAOS”を、この6日間で見つけよう。<br>9/1〜6｜CLUSTARS大集合まつり</p>
-                        <a href="https://discord.gg/VqgHpatD8g" target="_blank" class="go-button" style="background-color: #5865F2; color: #fff !important; border-color: #fff;">まずはディスコードに参加👇️</a>
-                    `
-                },
-                {
-                    title: "CLUSTARS OFFICIAL",
-                    content: `
-                        <p class="mb-2">クリエイターコミュニティ「CLUSTARS」の公式サイトはこちら！</p>
-                        <a href="https://clustars.jp/" target="_blank" class="go-button">公式サイトへGO!</a>
-                    `
-                }
+                { title: "DISCORD COMMUNITY", content: `<p class="mb-2">バーチャルでお友達がもっとほしい！<br>そんな人にこそ、CLUSTARS大集合まつり。</p><p class="font-bold text-lg my-2 text-center">BE MORE CHAOS！！</p><p class="mb-2">1歩踏み出すのに、完璧なんていらない。<br>カオスでOK、未完成でOK。</p><p class="mb-3">あなたの“CHAOS”を、この6日間で見つけよう。<br>9/1〜6｜CLUSTARS大集合まつり</p><a href="https://discord.gg/VqgHpatD8g" target="_blank" class="go-button" style="background-color: #5865F2; color: #fff !important; border-color: #fff;">まずはディスコードに参加👇️</a>`},
+                { title: "CLUSTARS OFFICIAL", content: `<p class="mb-2">クリエイターコミュニティ「CLUSTARS」の公式サイトはこちら！</p><a href="https://clustars.jp/" target="_blank" class="go-button">公式サイトへGO!</a>`},
+                { title: "NOTE ARTICLE", content: `<p class="mb-2"><strong>【9/1〜9/6】CLUSTARS大集合まつり開催！CHAOSな毎日に飛び込もう</strong></p><p>イベントの魅力や詳細について、こちらの記事でチェック！</p><a href="https://note.com/yugiri1115/n/ne18053d7c148" target="_blank" class="go-button">記事を読む</a>`}
             ];
-
             specialWindows.forEach((data, index) => {
                 const windowEl = document.createElement('div');
                 windowEl.className = 'window';
-                windowEl.innerHTML = `
-                    <div class="title-bar">
-                        <span>${data.title}</span>
-                        <div class="title-bar-buttons">
-                            <div class="title-bar-button">_</div>
-                            <div class="title-bar-button">□</div>
-                            <div class="title-bar-button">X</div>
-                        </div>
-                    </div>
-                    <div class="window-body">${data.content}</div>
-                `;
+                windowEl.innerHTML = `<div class="title-bar"><span>${data.title}</span><div class="title-bar-buttons"><div class="title-bar-button">_</div><div class="title-bar-button">□</div><div class="title-bar-button">X</div></div></div><div class="window-body">${data.content}</div>`;
                 container.appendChild(windowEl);
-
-                 gsap.fromTo(windowEl, 
-                    {
-                        visibility: 'visible',
-                        x: () => window.innerWidth / 2,
-                        y: -200,
-                        scale: 0.5,
-                        rotation: () => Math.random() * -180
-                    },
-                    {
-                        x: () => Math.random() * (window.innerWidth - 350),
-                        y: () => Math.random() * (window.innerHeight - 250),
-                        scale: 1,
-                        rotation: () => Math.random() * 10 - 5,
-                        duration: 2,
-                        ease: "bounce.out",
-                        delay: 2 + index * 0.2
-                    }
-                );
-
-                windowEl.addEventListener('mousedown', () => {
-                    highestZ++;
-                    gsap.set(windowEl, { zIndex: highestZ });
-                });
+                 gsap.fromTo(windowEl, { visibility: 'visible', x: () => window.innerWidth / 2, y: -200, scale: 0.5, rotation: () => Math.random() * -180 }, { x: () => Math.random() * (window.innerWidth - 350), y: () => Math.random() * (window.innerHeight - 250), scale: 1, rotation: () => Math.random() * 10 - 5, duration: 2, ease: "bounce.out", delay: 2 + index * 0.2 });
+                windowEl.addEventListener('mousedown', () => { highestZ++; gsap.set(windowEl, { zIndex: highestZ }); });
             });
 
-
-            // --- みんなのカオスロゴを生成 & アニメーション ---
             const chaosLogos = [
-                'https://media.discordapp.net/attachments/1401570149693128824/1404452524202659901/Sticker_Chaos.png',
-                'https://media.discordapp.net/attachments/1401570149693128824/1402195111378685993/banana.png',
-                'https://media.discordapp.net/attachments/1401570149693128824/1401961892221685850/IMG_2465.png',
-                'https://media.discordapp.net/attachments/1401570149693128824/1401597901972701346/1_20250804010904.png',
-                'https://media.discordapp.net/attachments/1401570149693128824/1401581791357436058/CHAOS.png',
-                'https://media.discordapp.net/attachments/1401570149693128824/1401581333376925729/chaos.png',
-                'https://media.discordapp.net/attachments/1401570149693128824/1401571494324211872/1.png'
+                'http://chaos-clustars.kagekin.com/img/chaos1.png',
+                'http://chaos-clustars.kagekin.com/img/chaos2.png',
+                'http://chaos-clustars.kagekin.com/img/chaos3.png',
+                'http://chaos-clustars.kagekin.com/img/chaos4.png',
+                'http://chaos-clustars.kagekin.com/img/chaos5.png',
+                'http://chaos-clustars.kagekin.com/img/chaos6.png',
+                'http://chaos-clustars.kagekin.com/img/chaos7.png'
             ];
-
             chaosLogos.forEach(url => {
-                const chaosImg = document.createElement('img');
-                chaosImg.src = url;
-                chaosImg.className = 'chaos-logo';
-                container.appendChild(chaosImg);
-
-                gsap.set(chaosImg, {
-                    x: () => Math.random() * window.innerWidth,
-                    y: () => Math.random() * window.innerHeight,
-                    scale: () => Math.random() * 0.4 + 0.3, // 30% ~ 70% of base size
-                });
-
-                function animateLogo(target) {
-                    gsap.to(target, {
-                        x: () => Math.random() * (window.innerWidth - 100),
-                        y: () => Math.random() * (window.innerHeight - 100),
-                        rotation: `+=${Math.random() * 180 - 90}`,
-                        duration: () => Math.random() * 10 + 8, // 8-18秒かけて移動
-                        ease: "power1.inOut",
-                        onComplete: animateLogo,
-                        onCompleteParams: [target]
-                    });
-                }
+                const chaosImg = document.createElement('img'); chaosImg.src = url; chaosImg.className = 'chaos-logo'; container.appendChild(chaosImg);
+                gsap.set(chaosImg, { x: () => Math.random() * window.innerWidth, y: () => Math.random() * window.innerHeight, scale: () => Math.random() * 0.4 + 0.3 });
+                function animateLogo(target) { gsap.to(target, { x: () => Math.random() * (window.innerWidth - 100), y: () => Math.random() * (window.innerHeight - 100), rotation: `+=${Math.random() * 180 - 90}`, duration: () => Math.random() * 10 + 8, ease: "power1.inOut", onComplete: animateLogo, onCompleteParams: [target] }); }
                 animateLogo(chaosImg);
             });
 
+            Draggable.create(".window", { type: "x,y", bounds: "#site-container", edgeResistance: 0.65, onPress: function() { highestZ++; gsap.set(this.target, { zIndex: highestZ }); } });
 
-            // --- ウィンドウをドラッグ可能にする ---
-            Draggable.create(".window", {
-                type: "x,y",
-                bounds: "#site-container", // スクロール対応のため、boundsを親要素に限定
-                edgeResistance: 0.65,
-                onPress: function() {
-                    highestZ++;
-                    gsap.set(this.target, { zIndex: highestZ });
-                }
-            });
-
-            // --- メインタイトルのアニメーション ---
             const title = document.getElementById('main-title');
-            gsap.from(title, {
-                duration: 1.5,
-                scale: 20,
-                opacity: 0,
-                ease: "power3.out",
-                delay: 0.5
-            });
-            
-            // タイトルにグリッチエフェクト
+            gsap.from(title, { duration: 1.5, scale: 20, opacity: 0, ease: "power3.out", delay: 0.5 });
             const glitchTimeline = gsap.timeline({ repeat: -1, repeatDelay: 3 });
-            glitchTimeline.to(title, { duration: 0.05, x: '+=5px', y: '-=5px', skewX: 5 })
-                         .to(title, { duration: 0.05, x: '-=10px', y: '+=10px', skewX: -10 })
-                         .to(title, { duration: 0.05, x: '+=5px', y: '-=5px', skewX: 5 })
-                         .to(title, { duration: 0.05, x: 0, y: 0, skewX: 0 });
+            glitchTimeline.to(title, { duration: 0.05, x: '+=5px', y: '-=5px', skewX: 5 }).to(title, { duration: 0.05, x: '-=10px', y: '+=10px', skewX: -10 }).to(title, { duration: 0.05, x: '+=5px', y: '-=5px', skewX: 5 }).to(title, { duration: 0.05, x: 0, y: 0, skewX: 0 });
 
-            // --- Xシェアボタンのアニメーションと機能 ---
             const shareBtn = document.getElementById('x-share-button');
             const pupil = shareBtn.querySelector('.pupil');
-
             window.addEventListener('mousemove', e => {
-                const rect = shareBtn.getBoundingClientRect();
-                const btnCenterX = rect.left + rect.width / 2;
-                const btnCenterY = rect.top + rect.height / 2;
-                
+                const rect = shareBtn.getBoundingClientRect(); const btnCenterX = rect.left + rect.width / 2; const btnCenterY = rect.top + rect.height / 2;
                 const angle = Math.atan2(e.clientY - btnCenterY, e.clientX - btnCenterX);
-                const dx = Math.cos(angle) * 6; // 瞳の移動範囲
-                const dy = Math.sin(angle) * 6;
-
-                gsap.to(pupil, 0.3, {
-                    attr: {
-                        cx: 50 + dx,
-                        cy: 55 + dy
-                    }
-                });
+                const dx = Math.cos(angle) * 6; const dy = Math.sin(angle) * 6;
+                gsap.to(pupil, 0.3, { attr: { cx: 50 + dx, cy: 55 + dy } });
             });
-
             shareBtn.addEventListener('click', () => {
-                const shareText = encodeURIComponent('「CLUSTARS大集合まつり～CHAOS～」開催中！\n9/1/～9/6はみんなでカオスになろうぜ！\n#CLUSTARSまつり');
-                const shareUrl = `https://twitter.com/intent/tweet?text=${shareText}`;
+                const shareText = encodeURIComponent('「CLUSTARS大集合まつり～CHAOS～」開催中！\n9/1～9/6はみんなでカオスになろうぜ！\n#CLUSTARSまつり');
+                const shareUrl = `https://twitter.com/intent/tweet?text=${shareText}&url=${encodeURIComponent('https://chaos-clustars.kagekin.com/')}`;
                 window.open(shareUrl, '_blank');
             });
+            
+            const bannerContainer = document.getElementById('discord-banner-section');
+            for (let i = 0; i < 50; i++) {
+                const banner = document.createElement('a'); banner.href = "https://discord.gg/VqgHpatD8g"; banner.target = "_blank"; banner.className = 'discord-banner'; banner.textContent = 'DISCORDへ参加!!!'; bannerContainer.appendChild(banner);
+                gsap.to(banner, { scale: () => 0.8 + Math.random() * 0.4, rotation: () => Math.random() * 10 - 5, duration: 1, repeat: -1, yoyo: true, ease: "power1.inOut", delay: Math.random() });
+            }
 
-            // --- UFOのアニメーション ---
             const ufo = document.getElementById('kagekin-ufo');
             gsap.set(ufo, {yPercent: -50, xPercent: -50, top: '50%', left: '50%'});
-
-            // 常にフワフワ浮遊するアニメーション
             const ufoTimeline = gsap.timeline({repeat: -1, yoyo: true});
-            ufoTimeline.to(ufo, {
-                yPercent: '-=5',
-                rotation: '+=5',
-                duration: 3,
-                ease: 'sine.inOut'
-            }).to(ufo, {
-                xPercent: '+=3',
-                duration: 4,
-                ease: 'sine.inOut'
-            });
-            
+            ufoTimeline.to(ufo, { yPercent: '-=5', rotation: '+=5', duration: 3, ease: 'sine.inOut' }).to(ufo, { xPercent: '+=3', duration: 4, ease: 'sine.inOut' });
+            gsap.timeline({ scrollTrigger: { trigger: '#ufo-section', start: 'top top', end: '+=150%', scrub: 1, pin: true } }).from(ufo, { yPercent: 200, scale: 0.2, rotation: -360 });
 
-            // スクロールに連動してUFOセクションをピン留め
-            gsap.timeline({
-                scrollTrigger: {
-                    trigger: '#ufo-section',
-                    start: 'top top',
-                    end: '+=150%', // 画面の1.5倍スクロールする間ピン留め
-                    scrub: 1,
-                    pin: true, // UFOセクションをピン留めする
-                }
-            })
-            .from(ufo, {
-                yPercent: 200,
-                scale: 0.2,
-                rotation: -360,
-            });
+            ScrollTrigger.create({ trigger: '#timeline-section', start: 'top 80%', end: 'bottom 80%', onToggle: self => { document.body.classList.toggle('ufo-cursor-active', self.isActive); } });
+            ScrollTrigger.create({ trigger: '#yugiri-section', start: 'top 80%', end: 'bottom 80%', onToggle: self => { document.body.classList.toggle('ufo-cursor-active', self.isActive); } });
 
 
-            // --- タイムラインの生成とアニメーション ---
             const timelineContainer = document.getElementById('timeline-container');
             eventData.forEach((event, index) => {
                 const eventDate = new Date(event['実施日']);
                 const dateString = `${eventDate.getMonth() + 1}/${eventDate.getDate()}`;
-                
                 const timelineItem = document.createElement('div');
                 timelineItem.className = `timeline-item ${index % 2 === 0 ? 'left' : 'right'}`;
-
-                timelineItem.innerHTML = `
-                    <div class="timeline-content">
-                        <h3 class="text-xl font-bold text-fuchsia-400 mb-2">${event['イベントタイトル']}</h3>
-                        <p class="mb-1 text-cyan-400"><strong><i class="fas fa-clock"></i> 日時:</strong> ${dateString} ${event['開始時間']} ~ ${event['終了時間']}</p>
-                        <p class="mb-2"><strong><i class="fas fa-user"></i> 担当:</strong> ${event['担当連絡者']}</p>
-                        <p class="text-sm mb-3">${event['備考、イベント内容']}</p>
-                        <div class="links">
-                            ${event['会場URL'] ? `<a href="${event['会場URL']}" target="_blank" class="go-button">会場へGO!</a>` : ''}
-                            ${event['YoutubeURL'] ? `<a href="${event['YoutubeURL']}" target="_blank" class="go-button">YoutubeへGO!</a>` : ''}
-                            ${event['公式サイトURL'] ? `<a href="${event['公式サイトURL']}" target="_blank" class="go-button" style="background-color: #ff0; color: #f0f !important;">公式サイト</a>` : ''}
-                        </div>
-                    </div>
-                `;
+                timelineItem.innerHTML = `<div class="timeline-content"><h3 class="text-xl font-bold text-fuchsia-400 mb-2">${event['イベントタイトル']}</h3><p class="mb-1 text-cyan-400"><strong>日時:</strong> ${dateString} ${event['開始時間']} ~ ${event['終了時間']}</p><p class="mb-2"><strong>担当:</strong> ${event['担当連絡者']}</p><p class="text-sm mb-3">${event['備考、イベント内容']}</p><div class="links">${event['会場URL'] ? `<a href="${event['会場URL']}" target="_blank" class="go-button">会場へGO!</a>` : ''}${event['YoutubeURL'] ? `<a href="${event['YoutubeURL']}" target="_blank" class="go-button">YoutubeへGO!</a>` : ''}${event['公式サイトURL'] ? `<a href="${event['公式サイトURL']}" target="_blank" class="go-button" style="background-color: #ff0; color: #f0f !important;">公式サイト</a>` : ''}</div></div>`;
                 timelineContainer.appendChild(timelineItem);
             });
+            gsap.utils.toArray('.timeline-item').forEach(item => { gsap.from(item, { autoAlpha: 0, y: 50, duration: 1, scrollTrigger: { trigger: item, start: 'top 80%' } }); });
 
-            // タイムラインアイテムの出現アニメーション
-            gsap.utils.toArray('.timeline-item').forEach(item => {
-                gsap.from(item, {
-                    autoAlpha: 0,
-                    y: 50,
-                    duration: 1,
-                    scrollTrigger: {
-                        trigger: item,
-                        start: 'top 80%',
-                    }
-                });
-            });
+            // Yugiri Section Animation
+            const yugiriSection = document.getElementById('yugiri-section');
+            const mandalaBg = yugiriSection.querySelector('.mandala-bg');
+            const yugiriChar = yugiriSection.querySelector('#yugiri-char');
+            const mandalaText = yugiriSection.querySelector('#mandala-text');
+            const flyingContainer = document.getElementById('flying-discord-container');
+
+            for (let i = 0; i < 20; i++) {
+                const btn = document.createElement('a'); btn.href = 'https://discord.gg/VqgHpatD8g'; btn.target = '_blank'; btn.className = 'flying-discord-btn'; btn.textContent = 'Discordに参加'; flyingContainer.appendChild(btn);
+                gsap.set(btn, { x: () => Math.random() * (window.innerWidth - 150), y: () => Math.random() * (yugiriSection.offsetHeight - 50), scale: () => Math.random() * 0.5 + 0.7 });
+                function fly(target) { gsap.to(target, { x: () => Math.random() * (window.innerWidth - 150), y: () => Math.random() * (yugiriSection.offsetHeight - 50), rotation: '+=360', duration: () => Math.random() * 5 + 5, ease: 'none', onComplete: fly, onCompleteParams: [target] }); }
+                fly(btn);
+            }
+            gsap.timeline({ scrollTrigger: { trigger: yugiriSection, start: 'top 70%', } }).to(mandalaBg, { duration: 3, autoAlpha: 1 }).to([yugiriChar, mandalaText], { duration: 2, autoAlpha: 1 }, "-=2");
 
         });
     </script>
 </body>
 </html>
+
 
 
