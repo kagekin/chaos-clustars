@@ -28,7 +28,11 @@
             font-family: 'DotGothic16', sans-serif;
             background-color: #000;
             color: #fff;
-            cursor: none; /* カスタムカーソルを使用するためデフォルトは非表示 */
+        }
+
+        /* 全ての要素でネイティブカーソルを強制的に非表示にする */
+        * {
+            cursor: none !important;
         }
 
         #site-container {
@@ -45,11 +49,11 @@
             z-index: 9999;
             width: 32px;
             height: 32px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABlBMVEX/AAAAAAD/AAD/nAL/AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAFUlEQVQ4y2NgGAWjYBSMglEwCkYgAgAATwAABAAB/wAAAABJRU5ErkJggg==');
+            /* 可視性の高い白黒のカーソルに差し替え & mix-blend-modeを削除 */
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZHRoPSIyOCIgdmlld0JveD0iMCAwIDI4IDI4Ij48cGF0aCBkPSJNNi4yMiwyMy4zbC0yLjctMTYsMTYsMTEtNi41LDEuMi02LjgsMy44WiIgc3R5bGU9ImZpbGw6ICMwMDA7IHN0cm9rZTogIzAwMDsgc3Ryb2tlLXdpZHRoOiAxcHg7Ii8+PHBhdGggZD0iTTYuODIsMjIuMmwtMi0xMiwxMiw4LjItNS41LDEtNC41LDIuOFoiIHN0eWxlPSJmaWxsOiAjZmZmOyIvPjwvc3ZnPg==');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            mix-blend-mode: difference;
             transition: transform 0.1s ease-out, background-image 0.3s ease, width 0.3s ease, height 0.3s ease;
         }
         
@@ -57,8 +61,20 @@
             background-image: url('https://ccparty.kagekin.com/img/ufo.png');
             width: 64px;
             height: 64px;
-            mix-blend-mode: normal;
         }
+        
+        body.chaos-cursor-active .custom-cursor {
+            background-image: url('http://chaos-clustars.kagekin.com/img/chaos1.png');
+            width: 80px;
+            height: 80px;
+            animation: spin 5s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+
 
         /* XP風ウィンドウのスタイル */
         .window {
@@ -85,8 +101,6 @@
             align-items: center;
         }
 
-        .title-bar-buttons, .window-body { cursor: none; }
-        
         .title-bar-button {
             width: 18px; height: 18px; border: 1px solid; border-color: #fff #555 #555 #fff;
             background-color: #c0c0c0; margin-left: 3px; display: flex;
@@ -103,10 +117,10 @@
             font-size: 5rem; font-weight: bold; color: #f0f;
             text-shadow: -3px -3px 0 #0ff, 3px -3px 0 #0ff, -3px 3px 0 #0ff, 3px 3px 0 #0ff, -5px -5px 0 #ff0, 5px -5px 0 #ff0, -5px 5px 0 #ff0, 5px 5px 0 #ff0;
             text-align: center; position: absolute; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); z-index: 100; cursor: pointer; user-select: none;
+            transform: translate(-50%, -50%); z-index: 100; user-select: none;
         }
 
-        a { color: #0000ff; text-decoration: underline; cursor: none !important; }
+        a { color: #0000ff; text-decoration: underline; }
         a:hover { color: #ff00ff; }
 
         .go-button {
@@ -125,7 +139,7 @@
         
         #x-share-button {
             position: fixed; bottom: 20px; right: 20px; z-index: 9999;
-            width: 80px; height: 80px; cursor: pointer; filter: drop-shadow(0 0 10px #0ff);
+            width: 80px; height: 80px; filter: drop-shadow(0 0 10px #0ff);
             transition: transform 0.2s ease-in-out;
         }
         #x-share-button:hover { transform: scale(1.1) rotate(-5deg); }
@@ -151,6 +165,17 @@
         }
         #fixed-discord-button:hover { transform: scale(1.1); }
         #fixed-discord-button .emoji { font-size: 24px; margin-top: -5px; }
+
+        #hero-campa-button {
+            position: fixed; top: 80px; left: 20px; z-index: 9998;
+            background: linear-gradient(45deg, #ffd700, #f0c040);
+            border: 3px solid #fff; border-radius: 8px;
+            padding: 10px; color: #000; font-weight: bold;
+            text-align: center; text-decoration: none;
+            box-shadow: 0 0 15px #ffd700; transition: transform 0.3s ease;
+        }
+        #hero-campa-button:hover { transform: scale(1.05); }
+        #hero-campa-button .big-text { font-size: 20px; }
 
 
         #ufo-section, #discord-banner-section {
@@ -200,10 +225,20 @@
         }
         #yugiri-char, #mandala-text { opacity: 0; }
 
-        .flying-discord-btn {
-            position: absolute; background: #5865F2; color: #fff; padding: 10px 15px;
+        .flying-element {
+            position: absolute;
+            will-change: transform;
+            text-decoration: none;
+            color: #fff;
+            text-align: center;
+        }
+        .flying-element.is-button {
+             background: #5865F2; padding: 10px 15px;
             border-radius: 8px; border: 2px solid white; font-weight: bold;
-            text-decoration: none; will-change: transform;
+        }
+        .flying-element.is-emoji {
+            font-size: 48px;
+            text-shadow: 0 0 5px #0ff;
         }
     </style>
 </head>
@@ -225,6 +260,10 @@
     </a>
     <a href="https://discord.gg/VqgHpatD8g" target="_blank" id="fixed-discord-button">
         <span>Dに<br>参加</span><span class="emoji">🐟️</span>
+    </a>
+    <a href="https://x.com/ps_kawasy" target="_blank" id="hero-campa-button">
+        <div class="big-text">💰ヒーローカンパ！💰</div>
+        <div>ウェブサイト資金をカンパしよう！<br>(to かわしぃさん)</div>
     </a>
 
     <!-- メインのスクロールコンテンツ -->
@@ -270,7 +309,7 @@
             <div class="mandala-bg"></div>
             <img id="yugiri-char" src="http://chaos-clustars.kagekin.com/img/yugiri.png" alt="ゆうぎり" class="relative z-10 w-full max-w-md h-auto mb-8">
             <p id="mandala-text" class="relative z-10 text-3xl text-center text-white" style="text-shadow: 0 0 10px #f0f;">見えますか？ これが私の曼荼羅の目</p>
-            <div id="flying-discord-container" class="absolute inset-0 z-20"></div>
+            <div id="flying-discord-container" class="absolute inset-0 z-20 pointer-events-none"></div>
         </section>
     </main>
 
@@ -286,7 +325,7 @@
                 {"イベントタイトル": "真夏のアドレセンス（idol live 2025）", "実施日": "2025-09-05", "開始時間": "21:00", "終了時間": "23:00", "実施プラットフォーム": "cluster, Youtube", "担当連絡者": "飾莉まお", "備考、イベント内容": "アイドルVtuberさんによる夏フェスをイメージしたライブイベントの予定です。コラボステージとかやりたいなー！諸々未定です！手探りですががんばります！", "会場URL": "https://cluster.mu/e/5d74d35c-f68d-4f0d-8850-4371297f2577", "YoutubeURL": "https://www.youtube.com/watch?v=WdehZpcH0eo"},
                 {"イベントタイトル": "第82回 3Dキメラ製作選手権", "実施日": "2025-09-05", "開始時間": "23:00", "終了時間": "未定", "実施プラットフォーム": "Youtube", "担当連絡者": "はましょー", "備考、イベント内容": "合成する3Dモデル+合成指示書を募集。指示書に従い、3Dモデルのキメラをblenderを使って作成する公開配信です。合成してできたものは、clusterで使用できるメッシュ数に落とした状態でお返し、できそうなら、リグまでつけます。", "会場URL": "", "YoutubeURL": "https://www.youtube.com/watch?v=XOxTbMR5iJ0"},
                 {"イベントタイトル": "クレイジーカオスパーティー！《マジヤバ～イ！ 限界ブチ上げ領域！》", "実施日": "2025-09-06", "開始時間": "18:00", "終了時間": "20:00", "実施プラットフォーム": "Youtube, cluster", "担当連絡者": "カゲキン", "備考、イベント内容": "YO! ユーたちわかってんのか？ カオスなやつらが集まって限界を超えたパーティーを開催だぜ！音楽！映像！パフォーマンス！全部ごちゃまぜの空間でブチ上がれ！ついてこれるやつだけついてきな！", "会場URL": "https://cluster.mu/e/b9a9f9d7-8e6f-4c5a-a5c1-c9a9d9b9e9f9", "YoutubeURL": "", "公式サイトURL": "https://ccparty.kagekin.com/"},
-                {"イベントタイトル": "閉会式", "実施日": "2025-09-06", "開始時間": "23:00", "終了時間": "未定", "実施プラットフォーム": "cluster", "担当連絡者": "ひかる", "備考、イベント内容": "CLUSTARS大集合まつり～CHAOS～の閉会式です。みんなで最後までカオスに盛り上がろう！", "会場URL": "", "YoutubeURL": ""}
+                {"イベントタイトル": "閉会式", "実施日": "2025-09-06", "開始時間": "23:00", "終了時間": "未定", "実施プラットフォーム": "cluster", "担当連絡者": "ゆうぎり", "備考、イベント内容": "CLUSTARS大集合まつり～CHAOS～の閉会式です。みんなで最後までカオスに盛り上がろう！", "会場URL": "", "YoutubeURL": ""}
             ];
 
             const container = document.getElementById('site-container');
@@ -326,12 +365,9 @@
             });
 
             const chaosLogos = [
-                'http://chaos-clustars.kagekin.com/img/chaos1.png',
-                'http://chaos-clustars.kagekin.com/img/chaos2.png',
-                'http://chaos-clustars.kagekin.com/img/chaos3.png',
-                'http://chaos-clustars.kagekin.com/img/chaos4.png',
-                'http://chaos-clustars.kagekin.com/img/chaos5.png',
-                'http://chaos-clustars.kagekin.com/img/chaos6.png',
+                'http://chaos-clustars.kagekin.com/img/chaos1.png', 'http://chaos-clustars.kagekin.com/img/chaos2.png',
+                'http://chaos-clustars.kagekin.com/img/chaos3.png', 'http://chaos-clustars.kagekin.com/img/chaos4.png',
+                'http://chaos-clustars.kagekin.com/img/chaos5.png', 'http://chaos-clustars.kagekin.com/img/chaos6.png',
                 'http://chaos-clustars.kagekin.com/img/chaos7.png'
             ];
             chaosLogos.forEach(url => {
@@ -374,9 +410,24 @@
             ufoTimeline.to(ufo, { yPercent: '-=5', rotation: '+=5', duration: 3, ease: 'sine.inOut' }).to(ufo, { xPercent: '+=3', duration: 4, ease: 'sine.inOut' });
             gsap.timeline({ scrollTrigger: { trigger: '#ufo-section', start: 'top top', end: '+=150%', scrub: 1, pin: true } }).from(ufo, { yPercent: 200, scale: 0.2, rotation: -360 });
 
-            ScrollTrigger.create({ trigger: '#timeline-section', start: 'top 80%', end: 'bottom 80%', onToggle: self => { document.body.classList.toggle('ufo-cursor-active', self.isActive); } });
-            ScrollTrigger.create({ trigger: '#yugiri-section', start: 'top 80%', end: 'bottom 80%', onToggle: self => { document.body.classList.toggle('ufo-cursor-active', self.isActive); } });
-
+            // --- 全てのセクションでカーソル変更をトリガー ---
+            document.querySelectorAll('main > section').forEach(section => {
+                ScrollTrigger.create({
+                    trigger: section,
+                    start: 'top 80%',
+                    end: 'bottom 80%',
+                    onToggle: self => {
+                        document.body.classList.remove('chaos-cursor-active', 'ufo-cursor-active');
+                        if (self.isActive) {
+                            if (section.id === 'recruiting-section') {
+                                document.body.classList.add('chaos-cursor-active');
+                            } else if (section.id === 'timeline-section' || section.id === 'yugiri-section' || section.id === 'ufo-section') {
+                                document.body.classList.add('ufo-cursor-active');
+                            }
+                        }
+                    }
+                });
+            });
 
             const timelineContainer = document.getElementById('timeline-container');
             eventData.forEach((event, index) => {
@@ -396,11 +447,40 @@
             const mandalaText = yugiriSection.querySelector('#mandala-text');
             const flyingContainer = document.getElementById('flying-discord-container');
 
-            for (let i = 0; i < 20; i++) {
-                const btn = document.createElement('a'); btn.href = 'https://discord.gg/VqgHpatD8g'; btn.target = '_blank'; btn.className = 'flying-discord-btn'; btn.textContent = 'Discordに参加'; flyingContainer.appendChild(btn);
-                gsap.set(btn, { x: () => Math.random() * (window.innerWidth - 150), y: () => Math.random() * (yugiriSection.offsetHeight - 50), scale: () => Math.random() * 0.5 + 0.7 });
-                function fly(target) { gsap.to(target, { x: () => Math.random() * (window.innerWidth - 150), y: () => Math.random() * (yugiriSection.offsetHeight - 50), rotation: '+=360', duration: () => Math.random() * 5 + 5, ease: 'none', onComplete: fly, onCompleteParams: [target] }); }
-                fly(btn);
+            const flyingItems = ['Discordに参加', '👁️', '🐱', '🐟️', '🌴'];
+
+            for (let i = 0; i < 30; i++) {
+                const itemType = flyingItems[Math.floor(Math.random() * flyingItems.length)];
+                const isButton = itemType === 'Discordに参加';
+                
+                const el = isButton ? document.createElement('a') : document.createElement('div');
+                el.className = 'flying-element';
+
+                if(isButton) {
+                    el.href = 'https://discord.gg/VqgHpatD8g';
+                    el.target = '_blank';
+                    el.classList.add('is-button');
+                    el.style.pointerEvents = 'auto';
+                } else {
+                    el.classList.add('is-emoji');
+                }
+                el.innerHTML = itemType;
+                flyingContainer.appendChild(el);
+
+                gsap.set(el, { x: () => Math.random() * (window.innerWidth - 150), y: () => Math.random() * (yugiriSection.offsetHeight - 50), scale: () => Math.random() * 0.5 + 0.7 });
+                
+                function fly(target) { 
+                    gsap.to(target, { 
+                        x: () => Math.random() * (window.innerWidth - 150), 
+                        y: () => Math.random() * (yugiriSection.offsetHeight - 50), 
+                        rotation: '+=360', 
+                        duration: () => Math.random() * 8 + 8, 
+                        ease: 'none', 
+                        onComplete: fly, 
+                        onCompleteParams: [target] 
+                    }); 
+                }
+                fly(el);
             }
             gsap.timeline({ scrollTrigger: { trigger: yugiriSection, start: 'top 70%', } }).to(mandalaBg, { duration: 3, autoAlpha: 1 }).to([yugiriChar, mandalaText], { duration: 2, autoAlpha: 1 }, "-=2");
 
@@ -408,6 +488,4 @@
     </script>
 </body>
 </html>
-
-
 
